@@ -33,7 +33,7 @@ namespace MCPfiedSwagger.Extensions
                     var tool = CreateToolDefinition(path, operation, swaggerDoc, app.ApplicationServices);
                     var descriptor = GetControllerActionDescriptor(path, operation, actionProvider);
 
-                    MCPfiedSwaggerContext.Instance.Tools.Add(tool, descriptor);
+                    MCPfiedSwaggerContext.Current.Tools.Add(tool, descriptor);
                 }
             }
 
@@ -77,7 +77,7 @@ namespace MCPfiedSwagger.Extensions
                 Name = $"{method}_{endpoint}",
                 InputSchema = input,
                 Title = $"{method.ToUpper()} {endpoint}",
-                OutputSchema = null //okResponse == null ? null : output
+                OutputSchema = okResponse == null ? null : output
             };
         }
 

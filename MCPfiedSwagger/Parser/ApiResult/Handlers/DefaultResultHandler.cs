@@ -17,7 +17,7 @@ namespace MCPfiedSwagger.Parser.ApiResult.Handlers
                     Content = [new TextContentBlock { Text = "No result returned from the method.", Type = "text" }]
                 });
             }
-            var json = JsonSerializer.Serialize(result, MCPfiedSwaggerContext.Instance.JsonSerializerOptions);
+            var json = JsonSerializer.Serialize(result, MCPfiedSwaggerContext.Current.JsonSerializerOptions);
             return Task.FromResult(new CallToolResult
             {
                 Content = [new TextContentBlock { Text = json, Type = "text" }]

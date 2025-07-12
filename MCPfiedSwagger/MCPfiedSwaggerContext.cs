@@ -6,9 +6,9 @@ namespace MCPfiedSwagger
 {
     public class MCPfiedSwaggerContext
     {
-        public static MCPfiedSwaggerContext Instance { get; } = new MCPfiedSwaggerContext();
+        public static MCPfiedSwaggerContext Current { get; } = new MCPfiedSwaggerContext();
 
-        public Dictionary<Tool, ControllerActionDescriptor> Tools { get; internal set; }
+        public Dictionary<Tool, ControllerActionDescriptor> Tools { get; internal set; } = new Dictionary<Tool, ControllerActionDescriptor>();
         public JsonSerializerOptions JsonSerializerOptions { get; set; } = new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase

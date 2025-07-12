@@ -23,7 +23,7 @@ namespace MCPfiedSwagger.Extensions
         {
             await Task.CompletedTask;
 
-            var tool = MCPfiedSwaggerContext.Instance.Tools.ToList().FirstOrDefault(m => m.Key.Name == requestContext.Params.Name);
+            var tool = MCPfiedSwaggerContext.Current.Tools.ToList().FirstOrDefault(m => m.Key.Name == requestContext.Params.Name);
             var descriptor = tool.Value;
             var serviceProvider = requestContext.Services;
 
@@ -51,7 +51,7 @@ namespace MCPfiedSwagger.Extensions
         {
             await Task.CompletedTask;
 
-            return new ListToolsResult() { Tools = MCPfiedSwaggerContext.Instance.Tools.Select(m => m.Key).ToList() };
+            return new ListToolsResult() { Tools = MCPfiedSwaggerContext.Current.Tools.Select(m => m.Key).ToList() };
         }
 
         private static object[] GetMethodArguments(ParameterInfo[] parameters, IEnumerable<KeyValuePair<string, JsonElement>> arguments)
@@ -61,15 +61,20 @@ namespace MCPfiedSwagger.Extensions
             {
                 var param = parameters[i];
                 var arg = arguments.FirstOrDefault(a => a.Key == param.Name);
-                if (arg.Value.ValueKind == JsonValueKind.Null)
+                if (arg.Value.ValueKind == JsonValueKind.Null || arg.Value.ValueKind == JsonValueKind.Undefined)
                 {
                     args[i] = param.HasDefaultValue ? param.DefaultValue : GetDefault(param.ParameterType);
                 }
                 else
                 {
-                    args[i] = arg.Value is JsonElement jsonElem
-                        ? JsonSerializer.Deserialize(jsonElem.GetRawText(), param.ParameterType, MCPfiedSwaggerContext.Instance.JsonSerializerOptions)
-                        : Convert.ChangeType(arg.Value, param.ParameterType);
+                    if (arg.Value is JsonElement jsonElem)
+                    {
+                        args[i] = JsonSerializer.Deserialize(jsonElem.GetRawText(), param.ParameterType, MCPfiedSwaggerContext.Current.JsonSerializerOptions);
+                    }
+                    else
+                    {
+                        args[i] = Convert.ChangeType(arg.Value, param.ParameterType);
+                    }
                 }
             }
 

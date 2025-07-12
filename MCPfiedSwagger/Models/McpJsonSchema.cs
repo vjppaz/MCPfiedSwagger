@@ -13,7 +13,7 @@ public class McpJsonSchema
 
     public JsonElement ToJsonElement()
     {
-        var resultJson = JsonSerializer.Serialize(this, MCPfiedSwaggerContext.Instance.JsonSerializerOptions);
+        var resultJson = JsonSerializer.Serialize(this, MCPfiedSwaggerContext.Current.JsonSerializerOptions);
         return JsonSerializer.Deserialize<JsonElement>(resultJson);
     }
 }

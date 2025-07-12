@@ -11,7 +11,7 @@ namespace MCPfiedSwagger.Parser.ApiResult.Handlers
         public Task<CallToolResult> HandleAsync(object result)
         {
             var objectResult = (OkObjectResult)result;
-            var json = JsonSerializer.Serialize(objectResult.Value, MCPfiedSwaggerContext.Instance.JsonSerializerOptions);
+            var json = JsonSerializer.Serialize(objectResult.Value, MCPfiedSwaggerContext.Current.JsonSerializerOptions);
             return Task.FromResult(new CallToolResult
             {
                 Content = [new TextContentBlock { Text = json, Type = "text" }]

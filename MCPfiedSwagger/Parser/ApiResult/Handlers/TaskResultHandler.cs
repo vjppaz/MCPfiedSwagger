@@ -13,7 +13,7 @@ namespace MCPfiedSwagger.Parser.ApiResult.Handlers
             await task.ConfigureAwait(false);
             var resultProperty = task.GetType().GetProperty("Result");
             var value = resultProperty?.GetValue(task);
-            var json = JsonSerializer.Serialize(value, MCPfiedSwaggerContext.Instance.JsonSerializerOptions);
+            var json = JsonSerializer.Serialize(value, MCPfiedSwaggerContext.Current.JsonSerializerOptions);
             return new CallToolResult
             {
                 Content = [new TextContentBlock { Text = json, Type = "text" }]

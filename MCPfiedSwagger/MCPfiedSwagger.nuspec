@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>MCPfiedSwagger</id>
+    <version>0.0.1-draft</version>
+    <authors>vjppaz</authors>
+    <owners>Vincent James Paz</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="file">LICENSE</license>
+    <projectUrl>https://github.com/yourusername/MCPfiedSwagger</projectUrl>
+    <description>Swagger/OpenAPI extension that generates MCP protocol endpoint in ASP.NET Core.</description>
+    <releaseNotes>Initial release.</releaseNotes>
+    <copyright>Copyright � Vincent James Paz 2025</copyright>
+    <tags>swagger openapi aspnetcore mcp</tags>
+    <dependencies>
+        <group targetFramework="net9.0">
+            <dependency id="ModelContextProtocol.AspNetCore" version="0.3.0-preview.2" exclude="Build,Analyzers" />
+            <dependency id="Swashbuckle.AspNetCore" version="6.6.2" exclude="Build,Analyzers" />
+        </group>
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Text.Json" targetFramework=".NETCoreApp9.0" />
+    </frameworkAssemblies>
+  </metadata>
+  <files>
+    <file src="bin\Release\net9.0\MCPfiedSwagger.dll" target="lib\net9.0" />
+    <file src="LICENSE" target="" />
+    <file src="README.md" target="" />
+  </files>
+</package>
