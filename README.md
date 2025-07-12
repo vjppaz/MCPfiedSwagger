@@ -1,185 +1,104 @@
-# MCPfiedSwagger
+# MCPfiedSwagger 🚀
 
-A .NET library that bridges Swagger/OpenAPI specifications with the Model Context Protocol (MCP), enabling seamless integration of REST APIs as MCP tools.
+An ASP.Net extension that generates a Model Context Protocol (MCP) server, enabling seamless conversion of existing REST APIs as MCP tools.
 
-## Features
+[![NuGet](https://img.shields.io/nuget/v/MCPfiedSwagger.svg?style=flat-square&logo=nuget)](https://www.nuget.org/packages/MCPfiedSwagger)
 
-- 🔄 **Swagger to MCP Conversion**: Automatically convert Swagger/OpenAPI specifications into MCP-compatible tools
-- 🌐 **MCP Client Integration**: Built-in MCP client for communicating with MCP servers
-- 📊 **Type-Safe Models**: Strongly-typed C# models for both Swagger and MCP specifications
-- ⚡ **Async/Await Support**: Full asynchronous programming support
-- 🔧 **Extensible Architecture**: Interface-based design for easy customization and testing
+## 📦 Installation
 
-## Installation
+Install the `MCPfiedSwagger` NuGet package from your preferred NuGet source:
 
-Install the package via NuGet Package Manager:
-
-```bash
-dotnet add package MCPfiedSwagger
+```shell
+dotnet add package MCPfiedSwagger --version 0.0.1-draft
 ```
 
-Or via Package Manager Console:
+Or via the NuGet Package Manager:
 
-```powershell
-Install-Package MCPfiedSwagger
+```
+PM> Install-Package MCPfiedSwagger -Version 0.0.1-draft
 ```
 
-## Quick Start
+## ⚙️ Usage
 
-### Basic Usage
+1. **Add the MCPfiedSwagger service** in your ASP.NET Core project. In your `Program.cs`, register the service after adding controllers and Swagger:
+
+    ```csharp
+    builder.Services.AddMCPfiedSwagger();
+    ```
+
+2. **Enable the middleware** in your HTTP pipeline, after mapping controllers:
+
+    ```csharp
+    app.UseMCPfiedSwagger();
+    ```
+
+3. **Configure Swagger (optional):**  
+   By default, the Swagger/OpenAPI document is named `"v1"`. To specify a different document name, pass it as an argument:
+
+    ```csharp
+    app.UseMCPfiedSwagger("v1");
+    ```
+
+4. **Specify the MCP endpoint (optional):**  
+   The default MCP endpoint is `/mcp`. To change it, provide the desired path:
+
+    ```csharp
+    app.UseMCPfiedSwagger("v1", "/custom-mcp-endpoint");
+    ```
+
+## 📝 Example
+
+A minimal `Program.cs` setup:
 
 ```csharp
-using MCPfiedSwagger;
-using MCPfiedSwagger.Models;
+using MCPfiedSwagger.Extensions;
 
-// Initialize the service
-var service = new MCPSwaggerService();
+var builder = WebApplication.CreateBuilder(args);
 
-// Configure MCP server connection
-var mcpConfig = new MCPConfig
-{
-    ServerUrl = "https://your-mcp-server.com/api",
-    ApiVersion = "1.0",
-    TimeoutMs = 30000,
-    AuthToken = "your-auth-token" // Optional
-};
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddMCPfiedSwagger();
 
-// Your Swagger JSON specification
-string swaggerJson = File.ReadAllText("swagger.json");
+var app = builder.Build();
 
-// Register Swagger spec with MCP server
-bool success = await service.RegisterSwaggerWithMCPAsync(swaggerJson, mcpConfig);
+app.UseSwagger();
+app.UseSwaggerUI();
 
-if (success)
-{
-    Console.WriteLine("Swagger specification successfully registered with MCP server!");
-}
+app.UseAuthorization();
+app.MapControllers();
+
+// Enable MCP endpoint at /mcp for the "v1" Swagger document
+app.UseMCPfiedSwagger();
+
+app.Run();
 ```
 
-### Generate MCP Tools Without Server Connection
+## ▶️ Running the Example Project
 
-```csharp
-using MCPfiedSwagger;
+1. **Restore dependencies and build:**
 
-var service = new MCPSwaggerService();
-string swaggerJson = File.ReadAllText("swagger.json");
+    ```shell
+    dotnet restore
+    dotnet build
+    ```
 
-// Generate MCP tools from Swagger spec
-var mcpTools = service.GenerateMCPToolsFromSwagger(swaggerJson);
+2. **Run the project:**
 
-foreach (var tool in mcpTools)
-{
-    Console.WriteLine($"Generated MCP tool: {tool}");
-}
-```
+    ```shell
+    dotnet run --project MCPfiedSwagger.Example
+    ```
 
-### Advanced Usage with Dependency Injection
+3. **Access the Swagger UI:**  
+   Open 🌐 `http://localhost:<port>/swagger` in your browser.
 
-```csharp
-using MCPfiedSwagger;
-using MCPfiedSwagger.Interfaces;
-using MCPfiedSwagger.Services;
-using Microsoft.Extensions.DependencyInjection;
+4. **Use the MCP endpoint:**  
+   The MCP endpoint is available at 🔗 `http://localhost:<port>/mcp`.  
+   You can POST MCP protocol requests to this endpoint.  
+   The endpoint will process requests according to your REST API and return MCP-compliant responses.
 
-// Configure services
-var services = new ServiceCollection();
-services.AddTransient<IMCPClient, MCPClient>();
-services.AddTransient<ISwaggerProcessor, SwaggerProcessor>();
-services.AddTransient<MCPSwaggerService>();
+## 💡 Notes
 
-var serviceProvider = services.BuildServiceProvider();
-
-// Use the service
-var mcpSwaggerService = serviceProvider.GetRequiredService<MCPSwaggerService>();
-```
-
-## API Reference
-
-### MCPSwaggerService
-
-The main service class providing core functionality.
-
-#### Methods
-
-- `RegisterSwaggerWithMCPAsync(string swaggerJson, MCPConfig mcpConfig)`: Register Swagger spec with MCP server
-- `GenerateMCPToolsFromSwagger(string swaggerJson)`: Generate MCP tools from Swagger specification
-- `DisconnectAsync()`: Disconnect from MCP server
-
-### MCPConfig
-
-Configuration class for MCP server connection.
-
-#### Properties
-
-- `ServerUrl`: MCP server endpoint URL
-- `ApiVersion`: API version for MCP communication (default: "1.0")
-- `TimeoutMs`: Request timeout in milliseconds (default: 30000)
-- `AuthToken`: Optional authentication token
-
-### SwaggerSpec
-
-Represents a parsed Swagger/OpenAPI specification.
-
-#### Properties
-
-- `OpenApiVersion`: OpenAPI version (default: "3.0.0")
-- `Info`: API information
-- `Servers`: List of server URLs
-- `Paths`: API paths and operations
-
-## Examples
-
-### Working with Custom Swagger Specifications
-
-```csharp
-using MCPfiedSwagger;
-using MCPfiedSwagger.Models;
-
-var service = new MCPSwaggerService();
-
-// Create Swagger spec programmatically
-var swaggerSpec = new SwaggerSpec
-{
-    OpenApiVersion = "3.0.1",
-    Info = new ApiInfo
-    {
-        Title = "My API",
-        Version = "1.0.0",
-        Description = "A sample API"
-    },
-    Servers = new List<ServerInfo>
-    {
-        new ServerInfo { Url = "https://api.example.com", Description = "Production server" }
-    }
-};
-
-// Convert to JSON and process
-string swaggerJson = JsonSerializer.Serialize(swaggerSpec);
-var mcpTools = service.GenerateMCPToolsFromSwagger(swaggerJson);
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Support
-
-- 📧 Email: [Create an issue](https://github.com/vjppaz/MCPfiedSwagger/issues)
-- 📖 Documentation: [Wiki](https://github.com/vjppaz/MCPfiedSwagger/wiki)
-- 💬 Discussions: [GitHub Discussions](https://github.com/vjppaz/MCPfiedSwagger/discussions)
-
-## Changelog
-
-### Version 1.0.0
-- Initial release
-- Basic Swagger to MCP conversion
-- MCP client implementation
-- Async/await support
+- The NuGet package depends on `ModelContextProtocol.AspNetCore` and `Swashbuckle.AspNetCore`.
+- Make sure your project targets `.NET 9.0` or compatible.
+- For more details, see the [project repository](https://github.com/vjppaz/MCPfiedSwagger).

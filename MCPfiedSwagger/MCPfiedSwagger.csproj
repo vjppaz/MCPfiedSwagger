@@ -6,11 +6,12 @@
 		<Nullable>enable</Nullable>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageId>MCPfiedSwagger</PackageId>
-		<Version>1.0.0</Version>
+		<Version>0.0.1-preview</Version>
 		<Authors>vjppaz</Authors>
-		<Description>A .NET library for Model Context Protocol (MCP) integration with Swagger/OpenAPI</Description>
-		<PackageTags>MCP;Model Context Protocol;Swagger;OpenAPI;API</PackageTags>
+		<Description>Swagger/OpenAPI extension that generates MCP protocol endpoint for your REST API created in ASP.NET Core.</Description>
+		<PackageTags>swagger;openapi;aspnetcore;mcp</PackageTags>
 		<RepositoryUrl>https://github.com/vjppaz/MCPfiedSwagger</RepositoryUrl>
+		<Copyright>Copyright � Vincent James Paz 2025</Copyright>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
