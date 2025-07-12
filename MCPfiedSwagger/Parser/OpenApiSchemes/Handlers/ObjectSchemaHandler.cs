@@ -5,7 +5,7 @@ namespace MCPfiedSwagger.Parser.OpenApiSchemes.Handlers
 {
     public class ObjectSchemaHandler : IOpenApiSchemaHandler
     {
-        public bool CanHandle(OpenApiSchema schema) => schema.Type == "object";
+        public bool CanHandle(OpenApiSchema schema) => schema?.Type == "object";
 
         public McpJsonSchema Convert(OpenApiSchema schema, OpenApiDocument apiDocument)
         {
