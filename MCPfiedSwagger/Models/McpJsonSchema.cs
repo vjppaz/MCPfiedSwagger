@@ -1,4 +1,6 @@
-﻿namespace MCPfiedSwagger.Models;
+﻿using System.Text.Json;
+
+namespace MCPfiedSwagger.Models;
 
 public class McpJsonSchema
 {
@@ -8,4 +10,10 @@ public class McpJsonSchema
     public McpJsonSchema Items { get; set; }
     public Dictionary<string, McpJsonSchema> Properties { get; set; }
     public string[] Required { get; set; }
+
+    public JsonElement ToJsonElement()
+    {
+        var resultJson = JsonSerializer.Serialize(this, MCPfiedSwaggerContext.Instance.JsonSerializerOptions);
+        return JsonSerializer.Deserialize<JsonElement>(resultJson);
+    }
 }

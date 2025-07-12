@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MCPfiedSwagger.Parser.ApiResult;
 using Microsoft.Extensions.DependencyInjection;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
@@ -42,7 +42,7 @@ namespace MCPfiedSwagger.Extensions
 
             var args = GetMethodArguments(parameters, requestContext.Params.Arguments);
             var result = descriptor.MethodInfo.Invoke(controller, args);
-            var callToolResult = await ConvertMethodResult(result);
+            var callToolResult = await ApiResultConverter.ConvertAsync(result);
 
             return callToolResult;
         }
@@ -76,58 +76,5 @@ namespace MCPfiedSwagger.Extensions
             static object GetDefault(Type t) => t.IsValueType ? Activator.CreateInstance(t) : null;
             return args;
         }
-
-        private static async Task<CallToolResult> ConvertMethodResult(object result)
-        {
-            if (result is null)
-            {
-                return new CallToolResult
-                {
-                    IsError = true,
-                    Content = [new TextContentBlock { Text = "No result returned from the method.", Type = "text" }]
-                };
-            }
-            if (result is Task taskResult)
-            {
-                await taskResult.ConfigureAwait(false);
-                var resultProperty = taskResult.GetType().GetProperty("Result");
-                result = resultProperty.GetValue(taskResult);
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = JsonSerializer.Serialize(result, MCPfiedSwaggerContext.Instance.JsonSerializerOptions), Type = "text" }]
-                };
-            }
-            if (result is OkObjectResult objectResult)
-            {
-                result = objectResult.Value;
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = JsonSerializer.Serialize(result, MCPfiedSwaggerContext.Instance.JsonSerializerOptions), Type = "text" }]
-                };
-            }
-            if (result is BadRequestObjectResult badRequestObjectResult)
-            {
-                return new CallToolResult
-                {
-                    IsError = true,
-                    Content = [new TextContentBlock { Text = badRequestObjectResult.Value?.ToString() ?? "Bad Request", Type = "text" }]
-                };
-            }
-
-            if (result is string strResult)
-            {
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = strResult, Type = "text" }]
-                };
-            }
-
-            var jsonResult = JsonSerializer.Serialize(result, MCPfiedSwaggerContext.Instance.JsonSerializerOptions);
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = jsonResult, Type = "text" }]
-            };
-        }
-
     }
 }

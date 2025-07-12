@@ -1,4 +1,5 @@
 ﻿using MCPfiedSwagger.Models;
+using MCPfiedSwagger.Parser.OpenApiSchemes;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -88,12 +89,12 @@ namespace MCPfiedSwagger.Extensions
                 Type = "object",
                 Properties = parameters.ToDictionary(
                     p => p.Name,
-                    p => p.Schema)
+                    p => p.Schema),
+                Description = "Input parameters schema",
             };
 
-            result = MCPfiedSwaggerContext.Instance.Parser.ConvertSchema(schema, apiDocument);
-            var resultJson = JsonSerializer.Serialize(result, MCPfiedSwaggerContext.Instance.JsonSerializerOptions);
-            return JsonSerializer.Deserialize<JsonElement>(resultJson);
+            result = OpenApiSchemaConverter.ConvertSchema(schema, apiDocument);
+            return result.ToJsonElement();
         }
 
         private static JsonElement CreateOutputSchema(OpenApiResponse? openApiResponse, OpenApiDocument apiDocument)
@@ -104,9 +105,8 @@ namespace MCPfiedSwagger.Extensions
             var schema = openApiResponse.Content?.FirstOrDefault().Value?.Schema;
             if (schema == null) return new JsonElement();
 
-            var jsonSchema = MCPfiedSwaggerContext.Instance.Parser.ConvertSchema(schema, apiDocument);
-            var resultJson = JsonSerializer.Serialize(jsonSchema, MCPfiedSwaggerContext.Instance.JsonSerializerOptions);
-            return JsonSerializer.Deserialize<JsonElement>(resultJson);
+            var jsonSchema = OpenApiSchemaConverter.ConvertSchema(schema, apiDocument);
+            return jsonSchema.ToJsonElement();
         }
     }
 }
