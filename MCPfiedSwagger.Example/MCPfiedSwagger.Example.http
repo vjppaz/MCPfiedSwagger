@@ -1,0 +1,6 @@
+@MCPfiedSwagger.Example_HostAddress = http://localhost:5117
+
+GET {{MCPfiedSwagger.Example_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
