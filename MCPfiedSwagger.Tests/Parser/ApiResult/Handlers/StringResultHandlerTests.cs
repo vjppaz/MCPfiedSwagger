@@ -45,7 +45,7 @@ namespace MCPfiedSwagger.Tests.Parser.ApiResult.Handlers
             var stringResult = "Hello, World!";
 
             // Act
-            var result = await _handler.HandleAsync(stringResult);
+            var result = await _handler.HandleAsync(stringResult, false);
 
             // Assert
             Assert.NotNull(result);
@@ -53,7 +53,7 @@ namespace MCPfiedSwagger.Tests.Parser.ApiResult.Handlers
             Assert.NotNull(result.Content);
             Assert.Single(result.Content);
             Assert.IsType<TextContentBlock>(result.Content[0]);
-            
+
             var textContent = (TextContentBlock)result.Content[0];
             Assert.Equal("Hello, World!", textContent.Text);
             Assert.Equal("text", textContent.Type);
@@ -66,14 +66,14 @@ namespace MCPfiedSwagger.Tests.Parser.ApiResult.Handlers
             var stringResult = "";
 
             // Act
-            var result = await _handler.HandleAsync(stringResult);
+            var result = await _handler.HandleAsync(stringResult, false);
 
             // Assert
             Assert.NotNull(result);
             Assert.True(result.IsError != true);
             Assert.NotNull(result.Content);
             Assert.Single(result.Content);
-            
+
             var textContent = (TextContentBlock)result.Content[0];
             Assert.Equal("", textContent.Text);
             Assert.Equal("text", textContent.Type);

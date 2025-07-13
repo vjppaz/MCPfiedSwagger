@@ -11,7 +11,8 @@ namespace MCPfiedSwagger
         public Dictionary<Tool, ControllerActionDescriptor> Tools { get; internal set; } = new Dictionary<Tool, ControllerActionDescriptor>();
         public JsonSerializerOptions JsonSerializerOptions { get; set; } = new JsonSerializerOptions
         {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
         };
     }
 }

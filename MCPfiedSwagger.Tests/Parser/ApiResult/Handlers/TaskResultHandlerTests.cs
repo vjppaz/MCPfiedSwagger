@@ -58,7 +58,7 @@ namespace MCPfiedSwagger.Tests.Parser.ApiResult.Handlers
             var taskResult = Task.FromResult("Hello from task");
 
             // Act
-            var result = await _handler.HandleAsync(taskResult);
+            var result = await _handler.HandleAsync(taskResult, false);
 
             // Assert
             Assert.NotNull(result);
@@ -66,7 +66,7 @@ namespace MCPfiedSwagger.Tests.Parser.ApiResult.Handlers
             Assert.NotNull(result.Content);
             Assert.Single(result.Content);
             Assert.IsType<TextContentBlock>(result.Content[0]);
-            
+
             var textContent = (TextContentBlock)result.Content[0];
             Assert.Contains("Hello from task", textContent.Text);
             Assert.Equal("text", textContent.Type);
@@ -80,7 +80,7 @@ namespace MCPfiedSwagger.Tests.Parser.ApiResult.Handlers
             var taskResult = Task.FromResult(testObject);
 
             // Act
-            var result = await _handler.HandleAsync(taskResult);
+            var result = await _handler.HandleAsync(taskResult, false);
 
             // Assert
             Assert.NotNull(result);
@@ -88,7 +88,7 @@ namespace MCPfiedSwagger.Tests.Parser.ApiResult.Handlers
             Assert.NotNull(result.Content);
             Assert.Single(result.Content);
             Assert.IsType<TextContentBlock>(result.Content[0]);
-            
+
             var textContent = (TextContentBlock)result.Content[0];
             Assert.Contains("Test", textContent.Text);
             Assert.Contains("42", textContent.Text);
@@ -102,7 +102,7 @@ namespace MCPfiedSwagger.Tests.Parser.ApiResult.Handlers
             var taskResult = Task.CompletedTask;
 
             // Act
-            var result = await _handler.HandleAsync(taskResult);
+            var result = await _handler.HandleAsync(taskResult, false);
 
             // Assert
             Assert.NotNull(result);
@@ -110,7 +110,7 @@ namespace MCPfiedSwagger.Tests.Parser.ApiResult.Handlers
             Assert.NotNull(result.Content);
             Assert.Single(result.Content);
             Assert.IsType<TextContentBlock>(result.Content[0]);
-            
+
             var textContent = (TextContentBlock)result.Content[0];
             // Should serialize empty object since Task.CompletedTask has no meaningful result
             Assert.Equal("{}", textContent.Text);

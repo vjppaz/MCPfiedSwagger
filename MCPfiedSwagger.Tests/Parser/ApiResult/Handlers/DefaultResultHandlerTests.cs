@@ -42,7 +42,7 @@ namespace MCPfiedSwagger.Tests.Parser.ApiResult.Handlers
             object? nullResult = null;
 
             // Act
-            var result = await _handler.HandleAsync(nullResult!);
+            var result = await _handler.HandleAsync(nullResult!, false);
 
             // Assert
             Assert.NotNull(result);
@@ -50,9 +50,9 @@ namespace MCPfiedSwagger.Tests.Parser.ApiResult.Handlers
             Assert.NotNull(result.Content);
             Assert.Single(result.Content);
             Assert.IsType<TextContentBlock>(result.Content[0]);
-            
+
             var textContent = (TextContentBlock)result.Content[0];
-            Assert.Equal("No result returned from the method.", textContent.Text);
+            Assert.Equal("No result returned.", textContent.Text);
             Assert.Equal("text", textContent.Type);
         }
 
@@ -63,7 +63,7 @@ namespace MCPfiedSwagger.Tests.Parser.ApiResult.Handlers
             var testObject = new { Name = "Test", Value = 42, IsActive = true };
 
             // Act
-            var result = await _handler.HandleAsync(testObject);
+            var result = await _handler.HandleAsync(testObject, false);
 
             // Assert
             Assert.NotNull(result);
@@ -71,7 +71,7 @@ namespace MCPfiedSwagger.Tests.Parser.ApiResult.Handlers
             Assert.NotNull(result.Content);
             Assert.Single(result.Content);
             Assert.IsType<TextContentBlock>(result.Content[0]);
-            
+
             var textContent = (TextContentBlock)result.Content[0];
             Assert.Contains("Test", textContent.Text);
             Assert.Contains("42", textContent.Text);
@@ -86,7 +86,7 @@ namespace MCPfiedSwagger.Tests.Parser.ApiResult.Handlers
             var intResult = 123;
 
             // Act
-            var result = await _handler.HandleAsync(intResult);
+            var result = await _handler.HandleAsync(intResult, false);
 
             // Assert
             Assert.NotNull(result);
@@ -94,7 +94,7 @@ namespace MCPfiedSwagger.Tests.Parser.ApiResult.Handlers
             Assert.NotNull(result.Content);
             Assert.Single(result.Content);
             Assert.IsType<TextContentBlock>(result.Content[0]);
-            
+
             var textContent = (TextContentBlock)result.Content[0];
             Assert.Equal("123", textContent.Text);
             Assert.Equal("text", textContent.Type);
@@ -107,7 +107,7 @@ namespace MCPfiedSwagger.Tests.Parser.ApiResult.Handlers
             var listResult = new List<string> { "first", "second", "third" };
 
             // Act
-            var result = await _handler.HandleAsync(listResult);
+            var result = await _handler.HandleAsync(listResult, false);
 
             // Assert
             Assert.NotNull(result);
@@ -115,7 +115,7 @@ namespace MCPfiedSwagger.Tests.Parser.ApiResult.Handlers
             Assert.NotNull(result.Content);
             Assert.Single(result.Content);
             Assert.IsType<TextContentBlock>(result.Content[0]);
-            
+
             var textContent = (TextContentBlock)result.Content[0];
             Assert.Contains("first", textContent.Text);
             Assert.Contains("second", textContent.Text);

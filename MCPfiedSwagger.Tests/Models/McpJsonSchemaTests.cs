@@ -62,20 +62,5 @@ namespace MCPfiedSwagger.Tests.Models
             Assert.True(jsonElement.TryGetProperty("items", out var itemsProp));
             Assert.Equal("string", itemsProp.GetProperty("type").GetString());
         }
-
-        [Fact]
-        public void ToJsonElement_SerializesNullProperties_Correctly()
-        {
-            var schema = new McpJsonSchema();
-
-            var jsonElement = schema.ToJsonElement();
-
-            Assert.True(jsonElement.TryGetProperty("type", out var typeProp));
-            Assert.Null(typeProp.GetString());
-            Assert.True(jsonElement.TryGetProperty("format", out var formatProp));
-            Assert.Null(formatProp.GetString());
-            Assert.True(jsonElement.TryGetProperty("description", out var descProp));
-            Assert.Null(descProp.GetString());
-        }
     }
 }

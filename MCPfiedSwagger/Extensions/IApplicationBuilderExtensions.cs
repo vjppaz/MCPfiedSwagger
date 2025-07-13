@@ -67,7 +67,7 @@ namespace MCPfiedSwagger.Extensions
             var endpoint = path.Key.TrimStart('/');
             var summary = operation.Value.Summary ?? "No summary";
             var outputDescription = operation.Value.Responses?.FirstOrDefault().Value?.Description ?? "Response";
-            var input = CreateInputSchema(operation.Value.Parameters, apiDocument);
+            var input = CreateInputSchema(operation.Value, apiDocument);
             var okResponse = operation.Value.Responses?.FirstOrDefault(m => m.Key == "200").Value;
             var output = CreateOutputSchema(okResponse, apiDocument);
 
@@ -77,33 +77,54 @@ namespace MCPfiedSwagger.Extensions
                 Name = $"{method}_{endpoint}",
                 InputSchema = input,
                 Title = $"{method.ToUpper()} {endpoint}",
-                OutputSchema = okResponse == null ? null : output
+                OutputSchema = output
             };
         }
 
-        private static JsonElement CreateInputSchema(IList<OpenApiParameter> parameters, OpenApiDocument apiDocument)
+        private static JsonElement CreateInputSchema(OpenApiOperation operation, OpenApiDocument apiDocument)
         {
             var result = new McpJsonSchema();
             var schema = new OpenApiSchema()
             {
                 Type = "object",
-                Properties = parameters.ToDictionary(
+                Properties = operation.Parameters.ToDictionary(
                     p => p.Name,
                     p => p.Schema),
                 Description = "Input parameters schema",
             };
+            var requestBody = operation.RequestBody?.Content?.FirstOrDefault(m => m.Key == "application/json").Value?.Schema;
+            if (requestBody is not null)
+            {
+                var bodySchema = requestBody.Reference == null ? requestBody : apiDocument.Components.Schemas[requestBody.Reference.Id];
+                foreach (var bodyProperty in bodySchema.Properties)
+                {
+                    var key = $"request.{bodyProperty.Key}";
+                    if (!schema.Properties.ContainsKey(key))
+                    {
+                        schema.Properties.Add(key, bodyProperty.Value);
+                    }
+                }
+            }
 
             result = OpenApiSchemaConverter.ConvertSchema(schema, apiDocument);
             return result.ToJsonElement();
         }
 
-        private static JsonElement CreateOutputSchema(OpenApiResponse? openApiResponse, OpenApiDocument apiDocument)
+        private static JsonElement? CreateOutputSchema(OpenApiResponse? openApiResponse, OpenApiDocument apiDocument)
         {
-            if (openApiResponse == null) return new JsonElement();
+
+            if (openApiResponse == null) return null;
 
             // Try to get the first schema from the response content (e.g., "application/json")
-            var schema = openApiResponse.Content?.FirstOrDefault().Value?.Schema;
-            if (schema == null) return new JsonElement();
+            var schema = openApiResponse.Content?.FirstOrDefault(m => m.Key == "application/json").Value?.Schema;
+            if (schema == null) return null;
+
+
+            //TODO: workaround, current version doesn't support array schema yet, refer to https://github.com/modelcontextprotocol/inspector/issues/552
+            if (schema.Type == "array")
+            {
+                return null;
+            }
 
             var jsonSchema = OpenApiSchemaConverter.ConvertSchema(schema, apiDocument);
             return jsonSchema.ToJsonElement();

@@ -1,5 +1,4 @@
 using MCPfiedSwagger.Parser.ApiResult;
-using MCPfiedSwagger.Parser.ApiResult.Handlers;
 using Microsoft.AspNetCore.Mvc;
 using ModelContextProtocol.Protocol;
 
@@ -15,7 +14,7 @@ namespace MCPfiedSwagger.Tests.Parser.ApiResult
             var okResult = new OkObjectResult(testObject);
 
             // Act
-            var result = await ApiResultConverter.ConvertAsync(okResult);
+            var result = await ApiResultConverter.ConvertAsync(okResult, false);
 
             // Assert
             Assert.NotNull(result);
@@ -36,7 +35,7 @@ namespace MCPfiedSwagger.Tests.Parser.ApiResult
             var badResult = new BadRequestObjectResult(errorObject);
 
             // Act
-            var result = await ApiResultConverter.ConvertAsync(badResult);
+            var result = await ApiResultConverter.ConvertAsync(badResult, false);
 
             // Assert
             Assert.NotNull(result);
@@ -55,7 +54,7 @@ namespace MCPfiedSwagger.Tests.Parser.ApiResult
             var stringResult = "Simple string response";
 
             // Act
-            var result = await ApiResultConverter.ConvertAsync(stringResult);
+            var result = await ApiResultConverter.ConvertAsync(stringResult, false);
 
             // Assert
             Assert.NotNull(result);
@@ -74,7 +73,7 @@ namespace MCPfiedSwagger.Tests.Parser.ApiResult
             var taskResult = Task.FromResult("Task completed");
 
             // Act
-            var result = await ApiResultConverter.ConvertAsync(taskResult);
+            var result = await ApiResultConverter.ConvertAsync(taskResult, false);
 
             // Assert
             Assert.NotNull(result);
@@ -93,7 +92,7 @@ namespace MCPfiedSwagger.Tests.Parser.ApiResult
             var unknownResult = new { UnknownProperty = "test" };
 
             // Act
-            var result = await ApiResultConverter.ConvertAsync(unknownResult);
+            var result = await ApiResultConverter.ConvertAsync(unknownResult, false);
 
             // Assert
             Assert.NotNull(result);

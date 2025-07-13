@@ -1,9 +1,8 @@
-﻿using MCPfiedSwagger.Parser.ApiResult;
+﻿using MCPfiedSwagger.Mapper;
+using MCPfiedSwagger.Parser.ApiResult;
 using Microsoft.Extensions.DependencyInjection;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
-using System.Reflection;
-using System.Text.Json;
 
 namespace MCPfiedSwagger.Extensions
 {
@@ -40,9 +39,11 @@ namespace MCPfiedSwagger.Extensions
             var controller = ActivatorUtilities.CreateInstance(serviceProvider, controllerType);
             var parameters = descriptor.MethodInfo.GetParameters();
 
-            var args = GetMethodArguments(parameters, requestContext.Params.Arguments);
+            var args = ParameterMapper.GetMethodArguments(parameters, requestContext.Params.Arguments);
             var result = descriptor.MethodInfo.Invoke(controller, args);
-            var callToolResult = await ApiResultConverter.ConvertAsync(result);
+
+            var expectedStructuredContent = tool.Key.OutputSchema != null;
+            var callToolResult = await ApiResultConverter.ConvertAsync(result, expectedStructuredContent);
 
             return callToolResult;
         }
@@ -52,34 +53,6 @@ namespace MCPfiedSwagger.Extensions
             await Task.CompletedTask;
 
             return new ListToolsResult() { Tools = MCPfiedSwaggerContext.Current.Tools.Select(m => m.Key).ToList() };
-        }
-
-        private static object[] GetMethodArguments(ParameterInfo[] parameters, IEnumerable<KeyValuePair<string, JsonElement>> arguments)
-        {
-            var args = new object[parameters.Length];
-            for (int i = 0; i < parameters.Length; i++)
-            {
-                var param = parameters[i];
-                var arg = arguments.FirstOrDefault(a => a.Key == param.Name);
-                if (arg.Value.ValueKind == JsonValueKind.Null || arg.Value.ValueKind == JsonValueKind.Undefined)
-                {
-                    args[i] = param.HasDefaultValue ? param.DefaultValue : GetDefault(param.ParameterType);
-                }
-                else
-                {
-                    if (arg.Value is JsonElement jsonElem)
-                    {
-                        args[i] = JsonSerializer.Deserialize(jsonElem.GetRawText(), param.ParameterType, MCPfiedSwaggerContext.Current.JsonSerializerOptions);
-                    }
-                    else
-                    {
-                        args[i] = Convert.ChangeType(arg.Value, param.ParameterType);
-                    }
-                }
-            }
-
-            static object GetDefault(Type t) => t.IsValueType ? Activator.CreateInstance(t) : null;
-            return args;
         }
     }
 }

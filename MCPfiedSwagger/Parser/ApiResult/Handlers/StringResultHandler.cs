@@ -6,7 +6,7 @@ namespace MCPfiedSwagger.Parser.ApiResult.Handlers
     {
         public bool CanHandle(object result) => result is string;
 
-        public Task<CallToolResult> HandleAsync(object result)
+        public Task<CallToolResult> HandleAsync(object result, bool expectedStructuredContent)
         {
             return Task.FromResult(new CallToolResult
             {
