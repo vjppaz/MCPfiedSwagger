@@ -9,6 +9,9 @@ namespace MCPfiedSwagger.Example.Controllers
         /// <summary>
         /// Represents a user with basic properties.
         /// </summary>
+        /// <param name="Id">The id of the user.</param>
+        /// <param name="Name">The name of the user.</param>
+        /// <param name="Age">The age of the user.</param>
         public record UserDto(Guid Id, string Name, int Age);
 
         /// <summary>

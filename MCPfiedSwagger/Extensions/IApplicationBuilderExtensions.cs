@@ -89,7 +89,11 @@ namespace MCPfiedSwagger.Extensions
                 Type = "object",
                 Properties = operation.Parameters.ToDictionary(
                     p => p.Name,
-                    p => p.Schema),
+                    p =>
+                    {
+                        p.Schema.Description = p.Description;
+                        return p.Schema;
+                    }),
                 Description = "Input parameters schema",
             };
             var requestBody = operation.RequestBody?.Content?.FirstOrDefault(m => m.Key == "application/json").Value?.Schema;
