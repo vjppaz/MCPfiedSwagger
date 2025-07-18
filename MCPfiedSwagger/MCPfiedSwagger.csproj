@@ -6,7 +6,7 @@
 		<Nullable>enable</Nullable>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageId>MCPfiedSwagger</PackageId>
-		<Version>0.0.2-preview</Version>
+		<Version>0.0.3-preview</Version>
 		<Authors>vjppaz</Authors>
 		<Description>Swagger/OpenAPI extension that generates MCP protocol endpoint for your REST API created in ASP.NET Core.</Description>
 		<PackageTags>swagger;openapi;aspnetcore;mcp</PackageTags>
