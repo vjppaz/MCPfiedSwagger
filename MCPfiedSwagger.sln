@@ -9,6 +9,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCPfiedSwagger.Tests", "MCP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCPfiedSwagger.Example", "MCPfiedSwagger.Example\MCPfiedSwagger.Example.csproj", "{D9FCD184-D534-4ECD-A30C-0433B310F97B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{29463521-1A16-446A-B0BC-2D32471448C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCPfiedSwagger.Authenticated", "MCPfiedSwagger.Authenticated\MCPfiedSwagger.Authenticated.csproj", "{9AAC81DF-6FAE-4D03-BBFD-7316511DC677}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,9 +61,26 @@ Global
 		{D9FCD184-D534-4ECD-A30C-0433B310F97B}.Release|x64.Build.0 = Release|Any CPU
 		{D9FCD184-D534-4ECD-A30C-0433B310F97B}.Release|x86.ActiveCfg = Release|Any CPU
 		{D9FCD184-D534-4ECD-A30C-0433B310F97B}.Release|x86.Build.0 = Release|Any CPU
+		{9AAC81DF-6FAE-4D03-BBFD-7316511DC677}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AAC81DF-6FAE-4D03-BBFD-7316511DC677}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AAC81DF-6FAE-4D03-BBFD-7316511DC677}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9AAC81DF-6FAE-4D03-BBFD-7316511DC677}.Debug|x64.Build.0 = Debug|Any CPU
+		{9AAC81DF-6FAE-4D03-BBFD-7316511DC677}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9AAC81DF-6FAE-4D03-BBFD-7316511DC677}.Debug|x86.Build.0 = Debug|Any CPU
+		{9AAC81DF-6FAE-4D03-BBFD-7316511DC677}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AAC81DF-6FAE-4D03-BBFD-7316511DC677}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AAC81DF-6FAE-4D03-BBFD-7316511DC677}.Release|x64.ActiveCfg = Release|Any CPU
+		{9AAC81DF-6FAE-4D03-BBFD-7316511DC677}.Release|x64.Build.0 = Release|Any CPU
+		{9AAC81DF-6FAE-4D03-BBFD-7316511DC677}.Release|x86.ActiveCfg = Release|Any CPU
+		{9AAC81DF-6FAE-4D03-BBFD-7316511DC677}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{71029BDE-C3E3-4F58-B5A1-5501681567B8} = {29463521-1A16-446A-B0BC-2D32471448C4}
+		{D9FCD184-D534-4ECD-A30C-0433B310F97B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{9AAC81DF-6FAE-4D03-BBFD-7316511DC677} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {214F38CE-BF80-458D-8163-87A2FE81FD32}
