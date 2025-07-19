@@ -9,13 +9,13 @@ An ASP.NET extension that generates a Model Context Protocol (MCP) server, enabl
 Install the `MCPfiedSwagger` NuGet package from your preferred NuGet source:
 
 ```shell
-dotnet add package MCPfiedSwagger --version 0.0.1-preview
+dotnet add package MCPfiedSwagger
 ```
 
 Or via the NuGet Package Manager:
 
 ```
-PM> Install-Package MCPfiedSwagger -Version 0.0.1-preview
+PM> Install-Package MCPfiedSwagger
 ```
 
 ## ⚙️ Usage
